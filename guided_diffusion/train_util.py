@@ -26,6 +26,7 @@ class TrainLoop:
         model,
         diffusion,
         data,
+        numpy_data=False,
         batch_size,
         microbatch,
         lr,
@@ -42,6 +43,7 @@ class TrainLoop:
         self.model = model
         self.diffusion = diffusion
         self.data = data
+        self.numpy_data = numpy_data
         self.batch_size = batch_size
         self.microbatch = microbatch if microbatch > 0 else batch_size
         self.lr = lr
@@ -168,6 +170,14 @@ class TrainLoop:
         # Save the last checkpoint if it wasn't already saved.
         if (self.step - 1) % self.save_interval != 0:
             self.save()
+    
+    def run_loop_numpy(self):
+        #TODO
+        while (
+            not self.lr_anneal_steps
+            or self.step + self.resume_step < self.lr_anneal_steps
+        ):
+            pass
 
     def run_step(self, batch, cond):
         self.forward_backward(batch, cond)
