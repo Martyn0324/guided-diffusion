@@ -17,6 +17,7 @@ def load_data(
     deterministic=False,
     random_crop=False,
     random_flip=True,
+    numpy=False,
 ):
     """
     For a dataset, create a generator over (images, kwargs) pairs.
@@ -38,7 +39,11 @@ def load_data(
     """
     if not data_dir:
         raise ValueError("unspecified data directory")
-    all_files = _list_image_files_recursively(data_dir)
+    
+    if numpy:
+        np.load(data_dir)
+      
+    all_files = _list_image_files_recursively(data_dir, numpy)
     classes = None
     if class_cond:
         # Assume classes are the first part of the filename,
@@ -67,7 +72,9 @@ def load_data(
         yield from loader
 
 
-def _list_image_files_recursively(data_dir):
+def _list_image_files_recursively(data_dir, numpy):
+    if numpy:
+         pass
     results = []
     for entry in sorted(bf.listdir(data_dir)):
         full_path = bf.join(data_dir, entry)
